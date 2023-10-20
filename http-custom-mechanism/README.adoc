@@ -297,6 +297,11 @@ Enter `clean package wildfly:deploy` for the *Goals* and click *Run*. This deplo
 // Debug the Application
 include::../shared-doc/debug-the-application.adoc[leveloffset=+1]
 
+// Build and run sections for other environments/builds
+ifndef::ProductRelease,EAPXPRelease[]
+include::../shared-doc/build-and-run-the-quickstart-with-provisioned-server.adoc[leveloffset=+1]
+endif::[]
+
 //*************************************************
 // Product Release content only
 //*************************************************
