@@ -23,9 +23,8 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Base64;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,8 +39,6 @@ public class BasicRuntimeIT {
 
     @Test
     public void testHTTPEndpointIsAvailable() throws IOException, InterruptedException, URISyntaxException {
-        String auth = Base64.getEncoder().encodeToString(("quickstartUser" + ":" + "quickstartPwd1!").getBytes(StandardCharsets.UTF_8));
-
         String serverHost = System.getenv("SERVER_HOST");
         if (serverHost == null) {
             serverHost = System.getProperty("server.host");
@@ -51,7 +48,8 @@ public class BasicRuntimeIT {
         }
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(serverHost+"/secured"))
-                .header("Authorization", "Basic " + auth)
+                .header("X-USERNAME", "quickstartUser")
+                .header("X-PASSWORD", "quickstartPwd1")
                 .GET()
                 .build();
         final HttpClient client = HttpClient.newBuilder()
@@ -60,5 +58,6 @@ public class BasicRuntimeIT {
                 .build();
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
+        Logger.getLogger(getClass().getName()).info("\n"+response.body());
     }
 }
